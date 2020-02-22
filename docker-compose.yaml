@@ -1,41 +1,16 @@
-#cloud-config
-merge_how:
- - name: list
-   settings: [append]
- - name: dict
-   settings: [no_replace, recurse_list]
-
-write_files:
-  ## syncthing/docker-compose.yaml sets up the Docker container for Syncthing
-  - path: /opt/containers/templates/syncthing/docker-compose.yaml.j2
-    content: |
-      version: '3.0'
-
-      services:
-        syncthing:
-          image: syncthing/syncthing
-          security_opt:
-            - no-new-privileges:true
-          environment:
-            FILE__TZ: "America/New_York"
-          volumes:
-            - /opt/containers/st-sync:/var/syncthing:rw
-              ##            - {{ photostructure.library_path }}:/ps/library:rw
-          networks:
-            - proxy
-          ports:
-            - 8384:8384
-            - 22000:22000
-            - 21027:21027/udp
-          labels:
-          restart: unless-stopped
-      networks:
-        proxy:
-          external: true
-
-runcmd:
-  - mkdir -p /opt/containers/st-sync
-  # Render the docker-compose from the template:
-  - j2 /opt/containers/templates/syncthing/docker-compose.yaml.j2 /run/cloud-init/user-variables-sensitive.yaml -o /opt/containers/st-sync/docker-compose.yaml
-  ## Create and start the containers
-  - docker-compose -f /opt/containers/st-sync/docker-compose.yaml up -d
+version: '3.0'
+services:
+  syncthing:
+    image: syncthing/syncthing
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      FILE__TZ: "America/New_York"
+    volumes:
+      - /opt/containers/st-sync:/var/syncthing
+    ##            - {{ photostructure.library_path }}:/ps/library:rw
+    ports:
+      - 8384:8384
+      - 22000:22000
+      - 21027:21027/udp
+    restart: unless-stopped
