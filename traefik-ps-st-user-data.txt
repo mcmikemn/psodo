@@ -50,7 +50,7 @@ Content-Transfer-Encoding: 7bit
 Content-Disposition: attachment; filename="cloudinit_includes.txt"
 
 #include
-https://raw.githubusercontent.com/mcmikemn/wtfaid/master/traefik.yaml?token=AK7BHBRGRQDLR2ON4CJUAQS6KG24O
+https://raw.githubusercontent.com/mcmikemn/wtfaid/master/traefik.yaml
 https://raw.githubusercontent.com/mcmikemn/wtfaid/master/ps-st.yaml
 
 --===============2524101902564364365==--
