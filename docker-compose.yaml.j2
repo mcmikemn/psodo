@@ -34,20 +34,35 @@ write_files:
           networks:
             - proxy
           labels:
-           - "traefik.enable=true"
-           - "traefik.http.routers.photostructure.entrypoints=http"
-           - "traefik.http.routers.photostructure.rule=Host(`{{ photostructure.domain }}`)"
-           - "traefik.http.middlewares.photostructure-https-redirect.redirectscheme.scheme=https"
-           - "traefik.http.routers.photostructure.middlewares=photostructure-https-redirect"
-           - "traefik.http.routers.photostructure-secure.entrypoints=https"
-           - "traefik.http.routers.photostructure-secure.rule=Host(`{{ photostructure.domain }}`)"
-           - "traefik.http.routers.photostructure-secure.tls=true"
-           - "traefik.http.routers.photostructure-secure.tls.certresolver=http"
-           - "traefik.http.routers.photostructure-secure.service=photostructure"
-           - "traefik.http.services.photostructure.loadbalancer.server.port=1787"
-           - "traefik.docker.network=proxy"
-           - "traefik.http.middlewares.photostructure-auth.basicauth.users={{ photostructure.basicauth_users }}"
-           - "traefik.http.routers.photostructure-secure.middlewares=photostructure-auth"
+            - "traefik.enable=true"
+            - "traefik.http.routers.photostructure.entrypoints=http"
+            - "traefik.http.routers.photostructure.rule=Host(`{{ photostructure.domain }}`)"
+            - "traefik.http.middlewares.photostructure-https-redirect.redirectscheme.scheme=https"
+            - "traefik.http.routers.photostructure.middlewares=photostructure-https-redirect"
+            - "traefik.http.routers.photostructure-secure.entrypoints=https"
+            - "traefik.http.routers.photostructure-secure.rule=Host(`{{ photostructure.domain }}`)"
+            - "traefik.http.routers.photostructure-secure.tls=true"
+            - "traefik.http.routers.photostructure-secure.tls.certresolver=http"
+            - "traefik.http.routers.photostructure-secure.service=photostructure"
+            - "traefik.http.services.photostructure.loadbalancer.server.port=1787"
+            - "traefik.docker.network=proxy"
+            - "traefik.http.middlewares.photostructure-auth.basicauth.users={{ photostructure.basicauth_users }}"
+            - "traefik.http.routers.photostructure-secure.middlewares=photostructure-auth"
+        syncthing:
+          image: syncthing/syncthing
+          security_opt:
+            - no-new-privileges:true
+          environment:
+            FILE__TZ: "America/New_York"
+            UMASK_SET: <022>
+          volumes:
+            - /opt/containers/st-sync:/var/syncthing
+            - /storage/photos:/storage/photos
+          ports:
+            - << syncthing.webui_port_ext >>:<< syncthing.webui_port_int >>
+            - << syncthing.listen_port_ext >>:<< syncthing.listen_port_int >>
+            - << syncthing.discovery_port_ext >>:<< syncthing.discovery_port_int >>/udp
+          restart: unless-stopped
       networks:
         proxy:
           external: true
