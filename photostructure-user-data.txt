@@ -1,0 +1,48 @@
+Content-Type: multipart/mixed; boundary="===============2524101902564364365=="
+MIME-Version: 1.0
+
+--===============2524101902564364365==
+Content-Type: text/cloud-config; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="user_variables.yaml"
+
+#cloud-config
+
+write_files:
+  - path: /run/cloud-init/user-variables-sensitive.yaml
+    content: |
+      traefik:
+        ## Set your full qualified (sub-)domain that traefik manages :
+        domain: pix.thewooskeys.com
+        ## Set your email address here (for letsencrypt):
+        email: digitalocean@thewooskeys.com
+        ## Set the volume name that you created for traefik:
+        config_volume: volume-nyc3-traefik-acme
+        ## It is more secure to leave the traefik dashboard turned off, you probably don't need it:
+        dashboard_enable: false
+        ## If you do turn on the dashboard, it will use this username:
+        username: traefik
+        ## If you do turn on the dashboard, it will use this password:
+        password: traefik
+      photostructure:
+        ## Set photostructure full qualified domain name
+        domain: pix.thewooskeys.com
+        library_path: /storage/photos
+        username: wooskey
+        password: sunshine
+      syncthing:
+        ## Set Syncthing variables
+
+
+--===============2524101902564364365==
+Content-Type: text/x-include-url; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="cloudinit_includes.txt"
+
+#include
+https://raw.githubusercontent.com/PlenusPyramis/dockerfiles/master/cloud-init/traefik.yaml
+https://raw.githubusercontent.com/PlenusPyramis/dockerfiles/master/cloud-init/photostructure.yaml
+
+--===============2524101902564364365==--
