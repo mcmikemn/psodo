@@ -32,7 +32,15 @@ write_files:
         username: wooskey
         password: sunshine
       syncthing:
-        ## Set Syncthing variables
+        ## Set Syncthing WebUI ports
+        webui_port_ext: 8384
+        webui_port_int: 8384
+        ## Set Syncthing listening ports
+        listen_port_ext: 22000
+        listen_port_int: 22000
+        ## Set Syncthing protocol discovery ports
+        discovery_port_ext: 21027
+        discovery_port_int: 21027
 
 
 --===============2524101902564364365==
