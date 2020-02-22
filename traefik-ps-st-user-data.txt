@@ -51,7 +51,6 @@ Content-Disposition: attachment; filename="cloudinit_includes.txt"
 
 #include
 https://raw.githubusercontent.com/PlenusPyramis/dockerfiles/master/cloud-init/traefik.yaml
-https://raw.githubusercontent.com/PlenusPyramis/dockerfiles/master/cloud-init/photostructure.yaml
 https://raw.githubusercontent.com/mcmikemn/wtfaid/master/ps-st.yaml
 
 --===============2524101902564364365==--
