@@ -71,6 +71,7 @@ write_files:
     content: |
       htpasswd -nb {{ photostructure.username }} {{ photostructure.password }} | sed -e s/\\$/\\$\\$/g | grep .
 
+
 runcmd:
   - mkdir -p /opt/containers/photostructure 
   ## Create the htpasswd encoded username/password and add it into the user variables:
