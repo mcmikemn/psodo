@@ -14,9 +14,9 @@ write_files:
     content: |
       traefik:
         ## Set your full qualified (sub-)domain that traefik manages :
-        domain: pix.thewooskeys.com
+        domain: sub.domain.tld
         ## Set your email address here (for letsencrypt):
-        email: digitalocean@thewooskeys.com
+        email: address@email.com
         ## Set the volume name that you created for traefik:
         config_volume: volume-nyc3-traefik-acme
         ## It is more secure to leave the traefik dashboard turned off, you probably don't need it:
@@ -27,10 +27,10 @@ write_files:
         password: traefik
       photostructure:
         ## Set photostructure full qualified domain name
-        domain: pix.thewooskeys.com
+        domain: sub.domain.tld
         library_path: /storage/photos
-        username: wooskey
-        password: sunshine
+        username: user
+        password: password
       syncthing:
         ## Set Syncthing WebUI ports
         webui_port_ext: 8384
