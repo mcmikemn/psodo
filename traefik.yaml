@@ -103,7 +103,7 @@ write_files:
     content: |
       #!/bin/sh
       set -e
-      mkdir /mnt/config/traefik
+      mkdir -p /mnt/config/traefik
       df -h /mnt/config | grep /mnt/config$ || exit 1
       touch /mnt/config/traefik/acme.json
       chmod 0600 /mnt/config/traefik/acme.json
