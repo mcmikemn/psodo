@@ -32,17 +32,12 @@ write_files:
         username: user
         password: password
       syncthing:
-        ## Set Syncthing WebUI ports
-        webui_port_ext: 8384
-        webui_port_int: 8384
-        ## Set Syncthing listening ports
+        root: /storage/photos
+        ## Set Syncthing listening port
         listen_port_ext: 22000
-        listen_port_int: 22000
-        ## Set Syncthing protocol discovery ports
+        ## Set Syncthing protocol discovery port
         discovery_port_ext: 21027
-        discovery_port_int: 21027
         ## Set synchthing volumes to sync
-        vol1: /storage/photos:/storage/photos
 
 
 --===============2524101902564364365==
