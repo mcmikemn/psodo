@@ -10,7 +10,7 @@ write_files:
     content: |
       #!/bin/sh
       set -e
-      {% for name,mount,fs_type in syncthing.volumes %}
+      {% for name,mount,fs_type in volumes %}
         mkdir -p {{ mount }}
         mount -o discard,defaults /dev/disk/by-id/scsi-0DO_Volume_{{ name }} {{ mount }}
         echo /dev/disk/by-id/scsi-0DO_Volume_{{ name }} {{ mount }} {{ fs_type }} defaults,nofail,discard 0 0 | sudo tee -a /etc/fstab
