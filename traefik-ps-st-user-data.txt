@@ -41,6 +41,8 @@ write_files:
         ## Set Syncthing protocol discovery ports
         discovery_port_ext: 21027
         discovery_port_int: 21027
+        ## Set synchthing volumes to sync
+        vol1: /storage/photos:/storage/photos
 
 
 --===============2524101902564364365==
