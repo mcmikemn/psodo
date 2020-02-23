@@ -37,7 +37,6 @@ write_files:
         listen_port_ext: 22000
         ## Set Syncthing protocol discovery port
         discovery_port_ext: 21027
-        ## Set synchthing volumes to sync
       volumes:
         - name: volume-nyc3-test-config
           mount: /mnt/config
