@@ -21,7 +21,11 @@ write_files:
             UMASK_SET: <022>
           volumes:
             - /opt/containers/syncthing:/var/syncthing
-            - {{ syncthing.vol1 }}
+            ## repeat next 3 lines (if statement) for each volume to set (might want to replace this with
+            ## a for loop, but what would the loop check for?)
+            {% if len(syncthing.vol1) %}
+              - {{ syncthing.vol1 }}
+            {% endif %}
           ports:
             - {{ syncthing.webui_port_ext }}:{{ syncthing.webui_port_int }}
             - {{ syncthing.listen_port_ext }}:{{ syncthing.listen_port_int }}
