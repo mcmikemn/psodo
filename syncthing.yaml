@@ -20,7 +20,7 @@ write_files:
             FILE__TZ: "America/New_York"
             UMASK_SET: <022>
           volumes:
-            - /opt/containers/st-sync:/var/syncthing
+            - /opt/containers/syncthing:/var/syncthing
             {% if syncthing.vol1 %}
             - {{ syncthing.vol1 }}
             {% endif %}
