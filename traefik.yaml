@@ -99,13 +99,10 @@ write_files:
         proxy:
           external: true
 
-  - path: /opt/containers/templates/traefik/volume_mount.sh.j2
+  - path: /opt/containers/templates/traefik/prepare_acme.sh.j2
     content: |
       #!/bin/sh
       set -e
-      mkdir -p /mnt/config
-      mount -o discard,defaults /dev/disk/by-id/scsi-0DO_Volume_{{ traefik.config_volume }} /mnt/config
-      echo /dev/disk/by-id/scsi-0DO_Volume_{{ traefik.config_volume }} /mnt/config ext4 defaults,nofail,discard 0 0 | sudo tee -a /etc/fstab
       mkdir /mnt/config/traefik
       df -h /mnt/config | grep /mnt/config$ || exit 1
       touch /mnt/config/traefik/acme.json
@@ -129,7 +126,7 @@ packages:
 runcmd:
   - pip3 install j2cli[yaml]
   ## Mount Traefik acme.json from an external volume so that it survives droplet recreation:
-  - j2 /opt/containers/templates/traefik/volume_mount.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
+  - j2 /opt/containers/templates/traefik/prepare_acme.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
   ## Create the htpasswd encoded username/password and add it into the user variables:
   - yq write --inplace -- /run/cloud-init/user-variables-sensitive.yaml traefik.basicauth_users $(j2 /opt/containers/templates/traefik/password_encode.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | bash)
   ## Render the traefik config from the template:

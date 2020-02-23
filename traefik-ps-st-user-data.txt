@@ -38,6 +38,11 @@ write_files:
         ## Set Syncthing protocol discovery port
         discovery_port_ext: 21027
         ## Set synchthing volumes to sync
+      volumes:
+        - name: volume_nyc3_config
+          mount: /mnt/config
+          fs_type: ext4
+
 
 
 --===============2524101902564364365==
@@ -47,6 +52,7 @@ Content-Transfer-Encoding: 7bit
 Content-Disposition: attachment; filename="cloudinit_includes.txt"
 
 #include
+https://raw.githubusercontent.com/mcmikemn/wtfaid/master/volumes.yaml
 https://raw.githubusercontent.com/mcmikemn/wtfaid/master/traefik.yaml
 https://raw.githubusercontent.com/mcmikemn/wtfaid/master/photostructure.yaml
 https://raw.githubusercontent.com/mcmikemn/wtfaid/master/syncthing.yaml

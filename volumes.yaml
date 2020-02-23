@@ -1,0 +1,20 @@
+#cloud-config
+merge_how:
+ - name: list
+   settings: [append]
+ - name: dict
+   settings: [no_replace, recurse_list]
+
+write_files:
+  - path: /opt/containers/templates/volumes/volumes_mount.sh.j2
+    content: |
+      #!/bin/sh
+      set -e
+      {% for name,mount,fs_type in syncthing.volumes %}
+        mkdir -p {{ mount }}
+        mount -o discard,defaults /dev/disk/by-id/scsi-0DO_Volume_{{ name }} {{ mount }}
+        echo /dev/disk/by-id/scsi-0DO_Volume_{{ name }} {{ mount }} {{ fs_type }} defaults,nofail,discard 0 0 | sudo tee -a /etc/fstab
+      {% endfor %}
+
+runcmd:
+  - j2 /opt/containers/templates/volumes/volumes_mount.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
