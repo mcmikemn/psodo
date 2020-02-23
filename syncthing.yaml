@@ -23,9 +23,9 @@ write_files:
             - /opt/containers/st-sync:/var/syncthing
             - /storage/photos:/storage/photos
           ports:
-            - << syncthing.webui_port_ext >>:<< syncthing.webui_port_int >>
-            - << syncthing.listen_port_ext >>:<< syncthing.listen_port_int >>
-            - << syncthing.discovery_port_ext >>:<< syncthing.discovery_port_int >>/udp
+            - {{ syncthing.webui_port_ext }}:{{ syncthing.webui_port_int }}
+            - {{ syncthing.listen_port_ext }}:{{ syncthing.listen_port_int }}
+            - {{ syncthing.discovery_port_ext }}:{{ syncthing.discovery_port_int }}/udp
           restart: unless-stopped
       networks:
         proxy:
