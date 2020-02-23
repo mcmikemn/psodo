@@ -19,7 +19,7 @@ write_files:
           volumes:
             - {{ syncthing.root }}:/var/syncthing
           ports:
-            - localhost:8384:8384
+            - 127.0.0.1:8384:8384
             - {{ syncthing.listen_port_ext }}:22000
             - {{ syncthing.discovery_port_ext }}:21027/udp
           restart: unless-stopped
