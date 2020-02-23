@@ -21,7 +21,9 @@ write_files:
             UMASK_SET: <022>
           volumes:
             - /opt/containers/st-sync:/var/syncthing
-            - /storage/photos:/storage/photos
+            {% if syncthing.vol1 %}
+            - {{ syncthing.vol1 }}
+            {% endif %}
           ports:
             - {{ syncthing.webui_port_ext }}:{{ syncthing.webui_port_int }}
             - {{ syncthing.listen_port_ext }}:{{ syncthing.listen_port_int }}
