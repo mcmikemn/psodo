@@ -51,6 +51,7 @@ Content-Disposition: attachment; filename="cloudinit_includes.txt"
 
 #include
 https://raw.githubusercontent.com/mcmikemn/wtfaid/master/traefik.yaml
-https://raw.githubusercontent.com/mcmikemn/wtfaid/master/ps-st.yaml
+https://raw.githubusercontent.com/mcmikemn/wtfaid/master/photostructure.yaml
+https://raw.githubusercontent.com/mcmikemn/wtfaid/master/syncthing.yaml
 
 --===============2524101902564364365==--
