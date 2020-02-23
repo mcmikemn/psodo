@@ -20,16 +20,11 @@ write_files:
             FILE__TZ: "America/New_York"
             UMASK_SET: <022>
           volumes:
-            - /opt/containers/syncthing:/var/syncthing
-            ## repeat next 3 lines (if statement) for each volume to set (might want to replace this with
-            ## a for loop, but what would the loop check for?)
-            {% if len(syncthing.vol1) %}
-              - {{ syncthing.vol1 }}
-            {% endif %}
+            - {{ syncthing.root }}:/var/syncthing
           ports:
-            - {{ syncthing.webui_port_ext }}:{{ syncthing.webui_port_int }}
-            - {{ syncthing.listen_port_ext }}:{{ syncthing.listen_port_int }}
-            - {{ syncthing.discovery_port_ext }}:{{ syncthing.discovery_port_int }}/udp
+            - localhost:8384:8384
+            - {{ syncthing.listen_port_ext }}:22000
+            - {{ syncthing.discovery_port_ext }}:21027/udp
           restart: unless-stopped
       networks:
         proxy:
