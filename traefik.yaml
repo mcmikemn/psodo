@@ -59,7 +59,7 @@ write_files:
             - /etc/localtime:/etc/localtime:ro
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - /opt/containers/traefik/data/traefik.yaml:/traefik.yml:ro
-            - /mnt/config/traefik/acme.json:/acme.json
+            - {{ traefik.acme_dir }}/acme.json:/acme.json
           labels:
             - "traefik.enable=true"
             - "traefik.http.routers.traefik.entrypoints=http"
@@ -103,10 +103,10 @@ write_files:
     content: |
       #!/bin/sh
       set -e
-      mkdir -p /mnt/config/traefik
-      df -h /mnt/config | grep /mnt/config$ || exit 1
-      touch /mnt/config/traefik/acme.json
-      chmod 0600 /mnt/config/traefik/acme.json
+      df -h {{ traefik.acme_dir }} | grep {{ traefik.acme_dir }}$ || exit 1
+      mkdir -p {{ traefik.acme_dir }}
+      touch {{ traefik.acme_dir }}/acme.json
+      chmod 0600 {{ traefik.acme_dir }}/acme.json
 
   - path: /opt/containers/templates/traefik/password_encode.sh.j2
     content: |

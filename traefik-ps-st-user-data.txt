@@ -17,8 +17,8 @@ write_files:
         domain: sub.domain.tld
         ## Set your email address here (for letsencrypt):
         email: address@email.com
-        ## Set the volume name that you created for traefik:
-        config_volume: volume-nyc3-traefik-acme
+        ## Set acme dir
+        acme_dir: /mnt/config/traefik
         ## It is more secure to leave the traefik dashboard turned off, you probably don't need it:
         dashboard_enable: false
         ## If you do turn on the dashboard, it will use this username:
@@ -39,7 +39,7 @@ write_files:
         discovery_port_ext: 21027
         ## Set synchthing volumes to sync
       volumes:
-        - name: volume_nyc3_config
+        - name: volume-nyc3-test-config
           mount: /mnt/config
           fs_type: ext4
 
