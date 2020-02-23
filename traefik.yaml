@@ -121,12 +121,8 @@ packages:
   - apache2-utils
   - jq
   - yq
-  - python3-pip
  
 runcmd:
-  - pip3 install j2cli[yaml]
-  ## Mount Traefik acme.json from an external volume so that it survives droplet recreation:
-  - j2 /opt/containers/templates/traefik/prepare_acme.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
   ## Create the htpasswd encoded username/password and add it into the user variables:
   - yq write --inplace -- /run/cloud-init/user-variables-sensitive.yaml traefik.basicauth_users $(j2 /opt/containers/templates/traefik/password_encode.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | bash)
   ## Render the traefik config from the template:
