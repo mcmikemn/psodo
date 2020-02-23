@@ -16,9 +16,6 @@ write_files:
           image: syncthing/syncthing
           security_opt:
             - no-new-privileges:true
-          environment:
-            FILE__TZ: "America/New_York"
-            UMASK_SET: <022>
           volumes:
             - {{ syncthing.root }}:/var/syncthing
           ports:
@@ -26,9 +23,6 @@ write_files:
             - {{ syncthing.listen_port_ext }}:22000
             - {{ syncthing.discovery_port_ext }}:21027/udp
           restart: unless-stopped
-      networks:
-        proxy:
-          external: true
 
 runcmd:
   - mkdir -p /opt/containers/syncthing
