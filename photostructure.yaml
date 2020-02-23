@@ -48,21 +48,6 @@ write_files:
             - "traefik.docker.network=proxy"
             - "traefik.http.middlewares.photostructure-auth.basicauth.users={{ photostructure.basicauth_users }}"
             - "traefik.http.routers.photostructure-secure.middlewares=photostructure-auth"
-        syncthing:
-          image: syncthing/syncthing
-          security_opt:
-            - no-new-privileges:true
-          environment:
-            FILE__TZ: "America/New_York"
-            UMASK_SET: <022>
-          volumes:
-            - /opt/containers/st-sync:/var/syncthing
-            - /storage/photos:/storage/photos
-          ports:
-            - << syncthing.webui_port_ext >>:<< syncthing.webui_port_int >>
-            - << syncthing.listen_port_ext >>:<< syncthing.listen_port_int >>
-            - << syncthing.discovery_port_ext >>:<< syncthing.discovery_port_int >>/udp
-          restart: unless-stopped
       networks:
         proxy:
           external: true
