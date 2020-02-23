@@ -34,8 +34,8 @@ write_files:
           external: true
 
 runcmd:
-  - mkdir -p /opt/containers/st-sync
+  - mkdir -p /opt/containers/syncthing
   ## Render the docker-compose from the template:
-  - j2 /opt/containers/templates/syncthing/docker-compose.yaml.j2 /run/cloud-init/user-variables-sensitive.yaml -o /opt/containers/st-sync/docker-compose.yaml
+  - j2 /opt/containers/templates/syncthing/docker-compose.yaml.j2 /run/cloud-init/user-variables-sensitive.yaml -o /opt/containers/syncthing/docker-compose.yaml
   ## Create and start the containers
-  - docker-compose -f /opt/containers/st-sync/docker-compose.yaml up -d
+  - docker-compose -f /opt/containers/syncthing/docker-compose.yaml up -d
