@@ -25,6 +25,7 @@ write_files:
 
 runcmd:
   - mkdir -p /opt/containers/sftp 
+  - mkdir -p /mnt/config/sftp
   ##Tip: you can generate your keys with these commands:
   ssh-keygen -t ed25519 -f ssh_host_ed25519_key < /dev/null
   ssh-keygen -t rsa -b 4096 -f ssh_host_rsa_key < /dev/null
