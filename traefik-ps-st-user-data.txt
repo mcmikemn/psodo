@@ -12,12 +12,21 @@ Content-Disposition: attachment; filename="user_variables.yaml"
 write_files:
   - path: /run/cloud-init/user-variables-sensitive.yaml
     content: |
+      volumes:
+        ## Set config volume name from Digital Ocean (persistent volume so as not to lose ssh keys, etc., when rebuilding droplet)
+        - name: volume-nyc3-test-config
+          mount: /mnt/config
+          fs_type: ext4
       traefik:
         ## Set your full qualified (sub-)domain that traefik manages :
         domain: sub.domain.tld
         ## Set your email address here (for letsencrypt):
         email: address@email.com
-        ## Set acme dir (use persistent volume so as not to lose ssh keys (e.g., letsencrypt) when rebuilding droplet - i.e., volumes["mount"], below)
+        ## Set the LetsEncrypt caServer
+        ## use https://acme-staging-v02.api.letsencrypt.org/directory for staging environment
+        ## use https://acme--v02.api.letsencrypt.org/directory for live environment
+        caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+        ## Set acme dir (use persistent volume so as not to lose ssh keys (e.g., letsencrypt) when rebuilding droplet - i.e., volumes["mount"], above)
         acme_dir: /mnt/config/traefik
         ## It is more secure to leave the traefik dashboard turned off, you probably don't need it:
         dashboard_enable: false
@@ -26,13 +35,16 @@ write_files:
         ## If you do turn on the dashboard, it will use this password:
         password: traefik
       photostructure:
-        ## Set photostructure full qualified domain name
+        ## Set Photostructure full qualified domain name (can {and should?} be same as {{ traefik.domain }}, above 
         domain: sub.domain.tld
+        ## Set path to PS library
         library_path: /storage/photos
+        ## Set PS username
         username: user
+        ## Set PS password
         password: password
       syncthing:
-        ## Set Syncthing default-folder
+        ## Set Syncthing default-folder (for Syncthing configs and also default syncing folder)
         volumes:
           - host: /storage/photos
             container: /storage/photos-syncthing
@@ -41,13 +53,10 @@ write_files:
         ## Set Syncthing protocol discovery port
         discovery_port: 21027
       sftp:
+        ## Set host port
         port: 2222
-        ## store the keys on a persistent volume so as not to lose them when rebuilding droplet. can use the config volume created for traefik/letsencrypt (i.e., volumes["mount"], below)
+        ## Set config volume (use persistent volume so as not to lose ssh keys when rebuilding droplet - i.e., volumes["mount"], above)
         config_root: /mnt/config/sftp
-      volumes:
-        - name: volume-nyc3-test-config
-          mount: /mnt/config
-          fs_type: ext4
 
 
 
