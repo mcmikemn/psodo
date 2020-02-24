@@ -1,0 +1,35 @@
+#cloud-config
+merge_how:
+ - name: list
+   settings: [append]
+ - name: dict
+   settings: [no_replace, recurse_list]
+    
+write_files:
+  ## photostructure/docker-compose.yaml sets up the Docker container for Photostructure
+  - path: /opt/containers/templates/sftp/docker-compose.yaml.j2
+    content: |
+      version: '3.0'
+      
+      services:
+        sftp:
+          image: atmoz/sftp
+          volumes:
+            - /host/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
+            - /host/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
+            - /host/share:/home/foo/share
+          ports:
+            - "{{ sftp.port }}:22" ## <--- can the {{ sftp.port }} be within quotation marks?
+          command: foo::1001
+          
+
+runcmd:
+  - mkdir -p /opt/containers/sftp 
+  ##Tip: you can generate your keys with these commands:
+  ssh-keygen -t ed25519 -f ssh_host_ed25519_key < /dev/null
+  ssh-keygen -t rsa -b 4096 -f ssh_host_rsa_key < /dev/null
+  ## Render the docker-compose from the template:
+  - j2 /opt/containers/templates/sftp/docker-compose.yaml.j2 /run/cloud-init/user-variables-sensitive.yaml -o /opt/containers/sftp/docker-compose.yaml
+  ## Create and start the containers
+  - docker-compose -f /opt/containers/sftp/docker-compose.yaml up -d
+  

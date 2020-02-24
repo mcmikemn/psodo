@@ -32,11 +32,16 @@ write_files:
         username: user
         password: password
       syncthing:
-        root: /storage/photos
+        ## Set Syncthing default-folder
+        volumes:
+          - host: /storage/photos
+            container: /storage/photos-syncthing
         ## Set Syncthing listening port
         listen_port_ext: 22000
         ## Set Syncthing protocol discovery port
         discovery_port_ext: 21027
+      sftp:
+        port: 2222
       volumes:
         - name: volume-nyc3-test-config
           mount: /mnt/config
@@ -54,6 +59,7 @@ Content-Disposition: attachment; filename="cloudinit_includes.txt"
 https://raw.githubusercontent.com/mcmikemn/wtfaid/master/volumes.yaml
 https://raw.githubusercontent.com/mcmikemn/wtfaid/master/traefik.yaml
 https://raw.githubusercontent.com/mcmikemn/wtfaid/master/photostructure.yaml
+https://raw.githubusercontent.com/mcmikemn/wtfaid/master/sftp.yaml
 https://raw.githubusercontent.com/mcmikemn/wtfaid/master/syncthing.yaml
 
 --===============2524101902564364365==--

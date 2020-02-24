@@ -28,7 +28,8 @@ write_files:
       certificatesResolvers:
         http:
           acme:
-            caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+            ##caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+            caServer: https://acme-v02.api.letsencrypt.org/directory
             email: {{ traefik.email }}
             storage: acme.json
             httpChallenge:
@@ -123,6 +124,7 @@ packages:
   - yq
  
 runcmd:
+  ## Render the prepare_acme file from the template:
   - j2 /opt/containers/templates/traefik/prepare_acme.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
   ## Create the htpasswd encoded username/password and add it into the user variables:
   - yq write --inplace -- /run/cloud-init/user-variables-sensitive.yaml traefik.basicauth_users $(j2 /opt/containers/templates/traefik/password_encode.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | bash)

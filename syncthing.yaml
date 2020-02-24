@@ -17,7 +17,10 @@ write_files:
           security_opt:
             - no-new-privileges:true
           volumes:
-            - {{ syncthing.root }}:/var/syncthing
+            - /opt/containers/syncthing/data:/var/syncthing
+          {% for v in volumes %}
+            - {{ v["host"] }}:{{ v["container"] }}
+          {% endfor %}
           ports:
             - 127.0.0.1:8384:8384
             - {{ syncthing.listen_port_ext }}:22000
