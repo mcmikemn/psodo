@@ -24,6 +24,7 @@ write_files:
           
   - path: /opt/containers/templates/sftp/keys.sh.j2
     content: |
+      mkdir -p {{ sftp.config_root }}
       ##Tip: you can generate your keys with these commands:
       ssh-keygen -t ed25519 -f {{ sftp.config_root }}/ssh_host_ed25519_key < /dev/null
       ssh-keygen -t rsa -b 4096 -f {{ sftp.config_root }}/ssh_host_rsa_key < /dev/null
