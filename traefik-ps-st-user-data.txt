@@ -17,7 +17,7 @@ write_files:
         domain: sub.domain.tld
         ## Set your email address here (for letsencrypt):
         email: address@email.com
-        ## Set acme dir
+        ## Set acme dir (use persistent volume so as not to lose ssh keys (e.g., letsencrypt) when rebuilding droplet - i.e., volumes["mount"], below)
         acme_dir: /mnt/config/traefik
         ## It is more secure to leave the traefik dashboard turned off, you probably don't need it:
         dashboard_enable: false
@@ -37,13 +37,13 @@ write_files:
           - host: /storage/photos
             container: /storage/photos-syncthing
         ## Set Syncthing listening port
-        listen_port_ext: 22000
+        listen_port: 22000
         ## Set Syncthing protocol discovery port
-        discovery_port_ext: 21027
+        discovery_port: 21027
       sftp:
         port: 2222
-        ssh_host_ed25519_key: /mnt/config/sftp/ssh_host_ed25519_key
-        ssh_host_rsa_key: /mnt/config/sftp/ssh_host_rsa_key
+        ## store the keys on a persistent volume so as not to lose them when rebuilding droplet. can use the config volume created for traefik/letsencrypt (i.e., volumes["mount"], below)
+        config_root: /mnt/config/sftp
       volumes:
         - name: volume-nyc3-test-config
           mount: /mnt/config
