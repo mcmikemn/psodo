@@ -22,13 +22,22 @@ write_files:
             - "{{ sftp.port }}:22"
           command: foo::1001
           
+  - path: /opt/containers/templates/sftp/keys.sh.j2
+    content: |
+      {% for v in volumes %}
+        mkdir -p {{ v["mount"] }}/sftp
+        ## i don't think i need the next 2 lines, because {{ v["mount"] }} was already mounted and added to fstab in volumes.yaml. right?
+        ##mount -o discard,defaults /dev/disk/by-id/scsi-0DO_Volume_{{ v["name"] }} {{ v["mount"] }}
+        ##echo /dev/disk/by-id/scsi-0DO_Volume_{{ v["name"] }} {{ v["mount"] }} {{ v["fs_type"] }} defaults,nofail,discard 0 0 | sudo tee -a /etc/fstab
+      {% endfor %}
+      ##Tip: you can generate your keys with these commands:
+      ssh-keygen -t ed25519 -f {{ sftp.ssh_host_ed25519_key }} < /dev/null
+      ssh-keygen -t rsa -b 4096 -f {{ sftp.ssh_host_rsa_key }} < /dev/null
+
+          
 
 runcmd:
   - mkdir -p /opt/containers/sftp 
-  - mkdir -p /mnt/config/sftp
-  ##Tip: you can generate your keys with these commands:
-  ssh-keygen -t ed25519 -f ssh_host_ed25519_key < /dev/null
-  ssh-keygen -t rsa -b 4096 -f ssh_host_rsa_key < /dev/null
   ## Render the docker-compose from the template:
   - j2 /opt/containers/templates/sftp/docker-compose.yaml.j2 /run/cloud-init/user-variables-sensitive.yaml -o /opt/containers/sftp/docker-compose.yaml
   ## Create and start the containers
