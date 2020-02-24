@@ -21,4 +21,5 @@ packages:
  
 runcmd:
   - pip3 install j2cli[yaml]
+  ## Render and execute the volumes_mount.sh from the template
   - j2 /opt/containers/templates/volumes/volumes_mount.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash

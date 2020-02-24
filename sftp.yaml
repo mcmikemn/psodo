@@ -15,8 +15,8 @@ write_files:
         sftp:
           image: atmoz/sftp
           volumes:
-            - {{ sftp.config_root }}:/etc/ssh/ssh_host_ed25519_key
-            - {{ sftp.config_root }}:/etc/ssh/ssh_host_rsa_key
+            - {{ sftp.config_root }}/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
+            - {{ sftp.config_root }}/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
             - /host/share:/home/foo/share
           ports:
             - "{{ sftp.port }}:22"
@@ -33,7 +33,7 @@ write_files:
 
 runcmd:
   - mkdir -p /opt/containers/sftp 
-  ## Render the keys.sh from the template:
+  ## Render and run the keys.sh from the template:
   - j2 /opt/containers/templates/sftp/keys.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
   ## Render the docker-compose from the template:
   - j2 /opt/containers/templates/sftp/docker-compose.yaml.j2 /run/cloud-init/user-variables-sensitive.yaml -o /opt/containers/sftp/docker-compose.yaml
