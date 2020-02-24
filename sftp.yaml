@@ -15,11 +15,11 @@ write_files:
         sftp:
           image: atmoz/sftp
           volumes:
-            - /host/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
-            - /host/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
+            - {{ sftp.ssh_host_ed25519_key }}:/etc/ssh/ssh_host_ed25519_key
+            - {{ sftp.ssh_host_rsa_key }}:/etc/ssh/ssh_host_rsa_key
             - /host/share:/home/foo/share
           ports:
-            - "{{ sftp.port }}:22" ## <--- can the {{ sftp.port }} be within quotation marks?
+            - "{{ sftp.port }}:22"
           command: foo::1001
           
 

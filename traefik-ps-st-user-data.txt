@@ -42,6 +42,8 @@ write_files:
         discovery_port_ext: 21027
       sftp:
         port: 2222
+        ssh_host_ed25519_key: /host/ssh_host_ed25519_key
+        ssh_host_rsa_key: /host/ssh_host_rsa_key
       volumes:
         - name: volume-nyc3-test-config
           mount: /mnt/config
