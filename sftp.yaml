@@ -17,10 +17,16 @@ write_files:
           volumes:
             - {{ sftp.config_root }}/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
             - {{ sftp.config_root }}/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
-            - /host/share:/home/foo/share
+            - {{ sftp.sftp_dir }}:/root/upload
+            - /opt/containers/sftp/data/users.conf:/etc/sftp/users.conf
           ports:
             - "{{ sftp.port }}:22"
-          command: foo::1001
+          ## I don't think I need a users section here because I'm using users.conf below
+          ##users:
+          ##  {% for u in sftp.users %}
+          ##  - name: {{ u["name"] }}
+          ##    pubkey: '{{ u["pubkey"] }}'
+          ##  {% endfor %}          
           
   - path: /opt/containers/templates/sftp/keys.sh.j2
     content: |
@@ -28,13 +34,19 @@ write_files:
       ##Tip: you can generate your keys with these commands:
       ssh-keygen -t ed25519 -f {{ sftp.config_root }}/ssh_host_ed25519_key < /dev/null
       ssh-keygen -t rsa -b 4096 -f {{ sftp.config_root }}/ssh_host_rsa_key < /dev/null
-
-          
+      
+  - path: /opt/containers/sftp/data/users.conf.j2
+    content: |
+      {% for u in sftp.users %}
+      {{ u["name"] }}::{{ u["uid"] }}:{{ u["gid"] }}:/home/{{ u["name"] }}/.ssh/keys/id_rsa.pub
+      {% endfor %}
 
 runcmd:
   - mkdir -p /opt/containers/sftp 
-  ## Render and execute the keys.sh from the template:
+  ## Render and execute keys.sh from the template:
   - j2 /opt/containers/templates/sftp/keys.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
+  ## Render and execute users.conf from the template:
+  - j2 /opt/containers/sftp/data/users.conf.j2 /run/cloud-init/user-variables-sensitive.yaml -o /opt/containers/sftp/data/users.conf
   ## Render the docker-compose from the template:
   - j2 /opt/containers/templates/sftp/docker-compose.yaml.j2 /run/cloud-init/user-variables-sensitive.yaml -o /opt/containers/sftp/docker-compose.yaml
   ## Create and start the containers
