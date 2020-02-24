@@ -17,8 +17,12 @@ write_files:
         - name: volume-nyc3-test-config
           mount: /mnt/config
           fs_type: ext4
+        ## Set volume containing Photostructure library
+        - name: volume-nyc3-temp-pslibrary
+          mount: /storage/photos
+          fs_type: ext4
       traefik:
-        ## Set your full qualified (sub-)domain that traefik manages :
+        ## Set your full qualified (sub-)domain that traefik manages:
         domain: sub.domain.tld
         ## Set your email address here (for letsencrypt):
         email: address@email.com
@@ -35,7 +39,7 @@ write_files:
         ## If you do turn on the dashboard, it will use this password:
         password: traefik
       photostructure:
-        ## Set Photostructure full qualified domain name (can {and should?} be same as {{ traefik.domain }}, above 
+        ## Set Photostructure full qualified domain name (must be same as {{ traefik.domain }}, above)
         domain: sub.domain.tld
         ## Set path to PS library
         library_path: /storage/photos
@@ -44,7 +48,7 @@ write_files:
         ## Set PS password
         password: password
       syncthing:
-        ## Set Syncthing default-folder (for Syncthing configs and also default syncing folder)
+        ## Set Syncthing default-folder (for Syncthing configs and also default syncing folder - host volume should be same as {{ photostructure.library_path }}, above, if you want to sync the PS library you're creating)
         volumes:
           - host: /storage/photos
             container: /storage/photos-syncthing

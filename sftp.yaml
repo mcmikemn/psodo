@@ -33,7 +33,7 @@ write_files:
 
 runcmd:
   - mkdir -p /opt/containers/sftp 
-  ## Render and run the keys.sh from the template:
+  ## Render and execute the keys.sh from the template:
   - j2 /opt/containers/templates/sftp/keys.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
   ## Render the docker-compose from the template:
   - j2 /opt/containers/templates/sftp/docker-compose.yaml.j2 /run/cloud-init/user-variables-sensitive.yaml -o /opt/containers/sftp/docker-compose.yaml
