@@ -36,8 +36,7 @@ write_files:
         ## create .ssh/keys/
         mkdir -p /home/{{ u["name"] }}/.ssh/keys
         ## write key
-        touch /home/{{ u["name"] }}/.ssh/keys/id_rsa.pub
-        echo '{{ u["pubkey"] }}' > /home/{{ u["name"] }}/.ssh/keys/id_rsa.pub
+        echo '{{ u["pubkey"] }}' > {{ sftp.sftp_dir }}/{{ u["home_dir"] }}/.ssh/keys/id_rsa.pub
         ## also add user to users.conf
         echo '{{ u["name"] }}::{{ u["uid"] }}:{{ u["gid"] }}:/home/{{ u["name"] }}/.ssh/keys/id_rsa.pub' >> /opt/containers/sftp/data/users.conf
       {% endfor %}
