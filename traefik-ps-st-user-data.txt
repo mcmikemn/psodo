@@ -14,7 +14,7 @@ write_files:
     content: |
       volumes:
         ## Set config volume name from Digital Ocean (persistent volume so as not to lose ssh keys, etc., when rebuilding droplet)
-        - name: volume-nyc3-test-config
+        - name: volume-nyc3-temp-config
           mount: /mnt/config
           fs_type: ext4
         ## Set volume containing Photostructure library
@@ -26,7 +26,7 @@ write_files:
         domain: sub.domain.tld
         ## Set your email address here (for letsencrypt):
         email: address@email.com
-        ## Set the LetsEncrypt caServer
+        ## Set the LetsEncrypt CA-server
         ## use https://acme-staging-v02.api.letsencrypt.org/directory for staging environment
         ## use https://acme--v02.api.letsencrypt.org/directory for live environment
         caserver: https://acme-staging-v02.api.letsencrypt.org/directory
@@ -63,6 +63,7 @@ write_files:
         config_root: /mnt/config/sftp
         ## Set directory on host to share
         sftp_dir: /storage/photos
+        ## Set sftp users - each user must have unique name, uid, and home_dir
         users:
           - name: user1
             pubkey: 'ssh-rsa XXXXXXXX'

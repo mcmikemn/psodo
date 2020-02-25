@@ -28,7 +28,7 @@ write_files:
       certificatesResolvers:
         http:
           acme:
-            caServer: {{ traefik.caserver }}
+            caserver: {{ traefik.caserver }}
             email: {{ traefik.email }}
             storage: acme.json
             httpChallenge:
