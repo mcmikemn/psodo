@@ -68,10 +68,12 @@ write_files:
             pubkey: 'ssh-rsa XXXXXXXX'
             uid: 1001
             gid: 100
+            home_Dir: user1
           - name: user2
             pubkey: 'ssh-rsa XXXXXXXX'
             uid: 1002
             gid: 100
+            home_dir: user2
         
 
 
