@@ -17,9 +17,9 @@ write_files:
           volumes:
             - {{ sftp.config_root }}/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
             - {{ sftp.config_root }}/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
-          {% for u in sftp.users }
+          {% for u in sftp.users %}
             - {{ sftp.sftp_dir }}/{{ sftp.home_dir }}:/home/{{ u["name"] }}
-          {% endfor}
+          {% endfor %}
             ##- {{ sftp.sftp_dir }}:/root/upload
             - /opt/containers/sftp/data/users.conf:/etc/sftp/users.conf
           ports:
@@ -31,10 +31,10 @@ write_files:
       ssh-keygen -t ed25519 -f {{ sftp.config_root }}/ssh_host_ed25519_key < /dev/null
       ssh-keygen -t rsa -b 4096 -f {{ sftp.config_root }}/ssh_host_rsa_key < /dev/null
       ## write each user's public key to their own directory
-      {% for u in sftp.users }
+      {% for u in sftp.users %}
         mkdir -p /home/{{ u["name"] }}/.ssh/keys
         cat {{ u["pubkey"] }} > /home/{{ u["name"] }}/.ssh/keys/id_rsa.pub
-      {% endfor}
+      {% endfor %}
       
   - path: /opt/containers/templates/sftp/users.conf.j2
     content: |
@@ -47,7 +47,7 @@ write_files:
     content: |
       {% for u in sftp.users %}
         mkdir -p {{ sftp.sftp_dir }}/{{ u["home_dir"] }}
-      {% endfor }
+      {% endfor %}
     
 runcmd:
   - mkdir -p /opt/containers/sftp
