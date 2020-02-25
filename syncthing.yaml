@@ -18,7 +18,7 @@ write_files:
             - no-new-privileges:true
           volumes:
             - /opt/containers/syncthing/data:/var/syncthing
-          {% for v in volumes %}
+          {% for v in syncthing.volumes %}
             - {{ v["host"] }}:{{ v["container"] }}
           {% endfor %}
           ports:
