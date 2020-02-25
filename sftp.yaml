@@ -17,9 +17,9 @@ write_files:
           volumes:
             - {{ sftp.config_root }}/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
             - {{ sftp.config_root }}/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
-            {% for u in sftp.users }
-              - {{ sftp.sftp_dir }}/{{ sftp.home_dir }}:/home/{{ u["name"] }}
-            {% endfor}
+          {% for u in sftp.users }
+            - {{ sftp.sftp_dir }}/{{ sftp.home_dir }}:/home/{{ u["name"] }}
+          {% endfor}
             ##- {{ sftp.sftp_dir }}:/root/upload
             - /opt/containers/sftp/data/users.conf:/etc/sftp/users.conf
           ports:
@@ -46,7 +46,7 @@ write_files:
   - path: /opt/containers/templates/sftp/user_home_dirs.j2
     content: |
       {% for u in sftp.users %}
-        mkdir -p {{ sftp.sftp_dir }}/{{ sftp.home_dir }}
+        mkdir -p {{ sftp.sftp_dir }}/{{ u["home_dir"] }}
       {% endfor }
     
 runcmd:
