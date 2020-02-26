@@ -27,15 +27,17 @@ write_files:
   - path: /opt/containers/templates/sftp/keys.sh.j2
     content: |
       mkdir -p {{ sftp.config_root }}
-      ssh-keygen -t ed25519 -f {{ sftp.config_root }}/ssh_host_ed25519_key < /dev/null
-      ssh-keygen -t rsa -b 4096 -f {{ sftp.config_root }}/ssh_host_rsa_key < /dev/null
+      ssh-keygen -q -t ed25519 -f {{ sftp.config_root }}/ssh_host_ed25519_key < /dev/null
+      ssh-keygen -q -t rsa -b 4096 -f {{ sftp.config_root }}/ssh_host_rsa_key < /dev/null
       ## write each user's public key to their own directory
       {% for u in sftp.users %}
         ## create home directory
         mkdir -p {{ sftp.sftp_dir }}/{{ u["home_dir"] }}
         ## create .ssh/keys/
-        mkdir -p /home/{{ u["name"] }}/.ssh/keys
+        ## I don't think I need the next line, I think the loop under sftp.volumes, above, does this
+        ##mkdir -p /home/{{ u["name"] }}/.ssh/keys
         ## write key
+        mkdir {{ sftp.sftp_dir }}/{{ u["home_dir"] }}/.ssh/keys
         echo '{{ u["pubkey"] }}' > {{ sftp.sftp_dir }}/{{ u["home_dir"] }}/.ssh/keys/id_rsa.pub
         ## also add user to users.conf
         echo '{{ u["name"] }}::{{ u["uid"] }}:{{ u["gid"] }}:/home/{{ u["name"] }}/.ssh/keys/id_rsa.pub' >> /opt/containers/sftp/data/users.conf
