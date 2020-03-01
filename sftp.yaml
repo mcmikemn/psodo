@@ -17,9 +17,11 @@ write_files:
           volumes:
             - {{ sftp.config_root }}/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
             - {{ sftp.config_root }}/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
-          {% for u in sftp.users %}
-            - {{ sftp.sftp_dir }}/{{ u["home_dir"] }}:/home/{{ u["name"] }}
-          {% endfor %}
+          ## loop = incorrect volume mapping
+          ##{% for u in sftp.users %}
+          ##  - {{ sftp.sftp_dir }}/{{ u["home_dir"] }}:/home/{{ u["name"] }}
+          ##{% endfor %}
+            - {{ sftp.sftp_dir }}:/home
             - /opt/containers/sftp/data/users.conf:/etc/sftp/users.conf
           ports:
             - "{{ sftp.port }}:22"
@@ -29,43 +31,27 @@ write_files:
       mkdir -p {{ sftp.config_root }}
       ssh-keygen -t ed25519 -f {{ sftp.config_root }}/ssh_host_ed25519_key < /dev/null
       ssh-keygen -t rsa -b 4096 -f {{ sftp.config_root }}/ssh_host_rsa_key < /dev/null
+      ## create users.conf to populate in loop
+      touch /opt/containers/sftp/data/users.conf
       ## write each user's public key to their own directory
       {% for u in sftp.users %}
         ## create home directory
-        mkdir -p {{ sftp.sftp_dir }}/{{ u["home_dir"] }}
+        mkdir -p {{ sftp.sftp_dir }}/{{ u["name"] }}
         ## create .ssh/keys/
-        ## I don't think I need the next line, I think the loop under sftp.volumes, above, does this
+        ## I don't think I need the next line, I think the loop under sftp.volumes in docker-compose.yaml does this
         ##mkdir -p /home/{{ u["name"] }}/.ssh/keys
         ## write key
-        mkdir -p {{ sftp.sftp_dir }}/{{ u["home_dir"] }}/.ssh/keys
-        echo '{{ u["pubkey"] }}' > {{ sftp.sftp_dir }}/{{ u["home_dir"] }}/.ssh/keys/id_rsa.pub
+        mkdir -p {{ sftp.sftp_dir }}/{{ u["name"] }}/.ssh/keys
+        echo '{{ u["pubkey"] }}' > /opt/containers/sftp/data/{{ u["name"] }}/.ssh/keys/id_rsa.pub
         ## also add user to users.conf
-        echo '{{ u["name"] }}::{{ u["uid"] }}:{{ u["gid"] }}:/home/{{ u["name"] }}/.ssh/keys/id_rsa.pub' >> /opt/containers/sftp/data/users.conf
+        ##echo '{{ u["name"] }}::{{ u["uid"] }}:{{ u["gid"] }}:/home/{{ u["name"] }}/.ssh/keys/id_rsa.pub' >> /opt/containers/sftp/data/users.conf
+        echo '{{ u["name"] }}::{{ u["uid"] }}:{{ u["gid"] }}:{{ u["name"] }}/{{ u[""] }}' >> /opt/containers/sftp/data/users.conf
       {% endfor %}
-      
-  ##- path: /opt/containers/templates/sftp/users.conf.j2
-  ##  content: |
-  ##    {% for u in sftp.users %}
-  ##      echo '{{ u["name"] }}::{{ u["uid"] }}:{{ u["gid"] }}:/home/{{ u["name"] }}/.ssh/keys/id_rsa.pub' >> /opt/containers/sftp/data/users.conf
-  ##    {% endfor %}
-      
-  ## i'm trying to create a home directory on the host for each sftp user. will this work, or when executed by j2 will it be in the conext of the container?
-  ##- path: /opt/containers/templates/sftp/user_home_dirs.j2
-  ##  content: |
-  ##    {% for u in sftp.users %}
-  ##      mkdir -p {{ sftp.sftp_dir }}/{{ u["home_dir"] }}
-  ##    {% endfor %}
     
 runcmd:
   - mkdir -p /opt/containers/sftp/data
-  - touch /opt/containers/sftp/data/users.conf
-  ## Render and execute user_home_dirs from the template (create each user's home directory on the host):
-  ##- j2 /opt/containers/templates/sftp/user_home_dirs.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
   ## Render and execute keys.sh from the template:
   - j2 /opt/containers/templates/sftp/keys.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
-  ## Render users.conf from the template:
-  ##- j2 /opt/containers/templates/sftp/users.conf.j2 /run/cloud-init/user-variables-sensitive.yaml -o /opt/containers/sftp/data/users.conf
-  ##- j2 /opt/containers/templates/sftp/users.conf.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
   ## Render the docker-compose from the template:
   - j2 /opt/containers/templates/sftp/docker-compose.yaml.j2 /run/cloud-init/user-variables-sensitive.yaml -o /opt/containers/sftp/docker-compose.yaml
   ## Create and start the containers
