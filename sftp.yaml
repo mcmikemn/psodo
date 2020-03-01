@@ -45,7 +45,7 @@ write_files:
         echo '{{ u["pubkey"] }}' > /opt/containers/sftp/data/{{ u["name"] }}/.ssh/keys/id_rsa.pub
         ## also add user to users.conf
         ##echo '{{ u["name"] }}::{{ u["uid"] }}:{{ u["gid"] }}:/home/{{ u["name"] }}/.ssh/keys/id_rsa.pub' >> /opt/containers/sftp/data/users.conf
-        echo '{{ u["name"] }}::{{ u["uid"] }}:{{ u["gid"] }}:{{ u["name"] }}/{{ u[""] }}' >> /opt/containers/sftp/data/users.conf
+        echo '{{ u["name"] }}::{{ u["uid"] }}:{{ u["gid"] }}:{{ u["name"] }}' >> /opt/containers/sftp/data/users.conf
       {% endfor %}
     
 runcmd:
