@@ -36,12 +36,12 @@ write_files:
       ## write each user's public key to their own directory
       {% for u in sftp.users %}
         ## create home directory
-        mkdir -p {{ sftp.sftp_dir }}/{{ u["name"] }}
+        ##mkdir -p {{ sftp.sftp_dir }}/{{ u["name"] }}
         ## create .ssh/keys/
         ## I don't think I need the next line, I think the loop under sftp.volumes in docker-compose.yaml does this
         ##mkdir -p /home/{{ u["name"] }}/.ssh/keys
         ## write key
-        mkdir -p {{ sftp.sftp_dir }}/{{ u["name"] }}/.ssh/keys
+        mkdir -p /opt/containers/sftp/data/{{ u["name"] }}/.ssh/keys
         echo '{{ u["pubkey"] }}' > /opt/containers/sftp/data/{{ u["name"] }}/.ssh/keys/id_rsa.pub
         ## also add user to users.conf
         ##echo '{{ u["name"] }}::{{ u["uid"] }}:{{ u["gid"] }}:/home/{{ u["name"] }}/.ssh/keys/id_rsa.pub' >> /opt/containers/sftp/data/users.conf
