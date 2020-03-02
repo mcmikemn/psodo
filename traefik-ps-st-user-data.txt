@@ -61,18 +61,24 @@ write_files:
         port: 2222
         ## Set config volume (use persistent volume so as not to lose ssh keys when rebuilding droplet - i.e., volumes["mount"], above)
         config_root: /mnt/config/sftp
-        ## Set directory on host to share
-        sftp_dir: /storage/photos
         ## Set sftp users - each user must have unique name and uid
         users:
           - name: user1
             pubkey: "ssh-rsa XXXXXXXX"
             uid: 1001
             gid: 100
+            ## Set directories on host to share in sftp user home
+            shares:
+              - name: photos
+                host: /storage/photos/incoming/user1
           - name: user2
             pubkey: "ssh-rsa XXXXXXXX"
             uid: 1002
             gid: 100
+            ## Set directories on host to share in sftp user home
+            shares:
+              - name: photos
+                host: /storage/photos/incoming/user2
         
 
 
