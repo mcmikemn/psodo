@@ -19,7 +19,7 @@
 - `ssh root@domain.com` (make sure your DNS record is set so domain.com points to your floating IP, otherwise just ssh to the droplet's IP)
 - `tail -f /var/log/cloud-init-output.log` (to watch it install)
 
-#### After droplet boots:
+#### After cloud-init finishes:
 - `chown 1000 /storage/photos` (You only need to do this once, ever: /storage/photos needs to be owned by UID that syncthing runs as (and hence also the UID of your one sftp user), but once you set it, it's in the inode for the directory (i.e., the owner stays with the directory wherever it is mounted.)
 
 ## Syncthing:
