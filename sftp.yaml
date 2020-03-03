@@ -36,8 +36,8 @@ write_files:
       {% for u in sftp.users %}
         ## write their public key(s) to their own directory
         mkdir -p /opt/containers/sftp/data/{{ u["name"] }}/.ssh/keys
-        {% for p in u["pubkeys"] %}
-          echo '{{ p }}' > /opt/containers/sftp/data/{{ u["name"] }}/.ssh/keys/{{ p }}_id_rsa.pub
+        {% for i in range(u["pubkeys"]) %}
+          echo '{{ u["pubkeys"][i] }}' > /opt/containers/sftp/data/{{ u["name"] }}/.ssh/keys/{{ i }}_id_rsa.pub
         {% endfor %}
         ## also add them to users.conf
         echo '{{ u["name"] }}::{{ u["uid"] }}:{{ u["gid"] }}:{{ u["name"] }}' >> /opt/containers/sftp/data/users.conf

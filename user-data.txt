@@ -72,7 +72,7 @@ write_files:
               - pubkey02: "ssh-rsa XXXXXXXX"
             uid: 1000
             gid: 100
-            ## Set directories on host to share in sftp user home
+            ## Set 1 or more directories on host to share in sftp user home
             shares:
               - name: photos
                 host: /storage/photos/person1pix
@@ -88,9 +88,6 @@ write_files:
             shares:
               - name: photos
                 host: /storage/photos/user2pix
-        
-
-
 
 --===============2524101902564364365==
 Content-Type: text/x-include-url; charset="us-ascii"
