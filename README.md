@@ -8,13 +8,13 @@
 - add block storage
   - add existing
     - click on config volume
-- choose datacenter NY3 (or whatever datacenter your photostructure library is also in - it's best to have them in same datacenter)
+- choose datacenter NY3 (or whatever datacenter your Photostructure library and config volumes are also in - they must be in same datacenter)
 - check "User Data" and paste in contents of user-data.txt
 - authentication: make sure your laptop's key is selected (to SSH in as root w/out password)
 - name your droplet
 
 #### Quickly after droplet is created and is booting:
-- attach floating IP
+- attach floating IP (floating IP must be in same region your Photostructure library and config volumes are in)
 - attach photo library volume
 - `ssh root@domain.com` (make sure your DNS record is set so domain.com points to your floating IP, otherwise just ssh to the droplet's IP)
 - `tail -f /var/log/cloud-init-output.log` (to watch it install)
