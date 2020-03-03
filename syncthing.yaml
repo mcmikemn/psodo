@@ -25,19 +25,18 @@ write_files:
             - 127.0.0.1:8384:8384
             - {{ syncthing.listen_port }}:22000
             - {{ syncthing.discovery_port }}:21027/udp
-          ##environment: 
-          ##  PUID: {{ syncthing.uid }}
-          ##  PGID: {{ syncthing.gid }}
+          environment: 
+            PUID: {{ syncthing.uid }}
+            PGID: {{ syncthing.gid }}
           restart: unless-stopped
 
   ## create .stfolder so syncthing recognizes photo library as syncable directory
   - path: /opt/containers/templates/syncthing/stfolder.sh.j2
     content: |
-    {% for v in syncthing.volumes %}
-      mkdir -p {{ v["host"] }}/.stfolder
-      ##chown {{syncthing.uid}} {{ v["host"] }}/.stfolder
-      chown 1000 {{ v["host"] }}/.stfolder
-    {% endfor %}
+      {% for v in syncthing.volumes %}
+        mkdir -p {{ v["host"] }}/.stfolder
+        chown {{syncthing.uid}} {{ v["host"] }}/.stfolder
+      {% endfor %}
     
 runcmd:
   - mkdir -p /opt/containers/syncthing
