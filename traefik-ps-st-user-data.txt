@@ -30,7 +30,7 @@ write_files:
         ## use https://acme-staging-v02.api.letsencrypt.org/directory for staging environment
         ## use https://acme--v02.api.letsencrypt.org/directory for live environment
         caserver: https://acme-staging-v02.api.letsencrypt.org/directory
-        ## Set acme dir (use persistent volume so as not to lose ssh keys (e.g., letsencrypt) when rebuilding droplet - i.e., volumes["mount"], above)
+        ## Set acme dir (use persistent volume to not lose ssh keys (e.g., letsencrypt) when rebuilding droplet - i.e., volumes["mount"], above)
         acme_dir: /mnt/config/traefik
         ## It is more secure to leave the traefik dashboard turned off, you probably don't need it:
         dashboard_enable: false
@@ -48,7 +48,7 @@ write_files:
         ## Set PS password
         password: password
       syncthing:
-        ## Set Syncthing default-folder (for Syncthing configs and also default syncing folder - host volume should be same as photostructure.library_path, above, if you want to sync the PS library you're creating)
+        ## Set Syncthing default-folder (for Syncthing configs and also default syncing folder - host volume should be same as photostructure.library_path, above, to sync the PS library you're creating)
         volumes:
           - host: /storage/photos
             container: /storage/photos-syncthing
@@ -59,7 +59,7 @@ write_files:
       sftp:
         ## Set host port
         port: 2222
-        ## Set config volume (use persistent volume so as not to lose ssh keys when rebuilding droplet - i.e., volumes["mount"], above)
+        ## Set config volume (use persistent volume to not lose ssh keys when rebuilding droplet - i.e., volumes["mount"], above)
         config_root: /mnt/config/sftp
         ## Set sftp users - each user must have unique name and uid, and should have a unique host directory
         users:
@@ -70,15 +70,16 @@ write_files:
             ## Set directories on host to share in sftp user home
             shares:
               - name: photos
-                host: /storage/photos/user1
+                host: /storage/photos/user1pix
+              - name: videos
+                host /storage/photos/user1vids
           - name: user2
             pubkey: "ssh-rsa XXXXXXXX"
             uid: 1002
             gid: 100
-            ## Set directories on host to share in sftp user home
             shares:
               - name: photos
-                host: /storage/photos/user2
+                host: /storage/photos/user2pix
         
 
 
