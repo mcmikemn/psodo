@@ -35,7 +35,7 @@ write_files:
     content: |
     {% for v in syncthing.volumes %}
       mkdir -p {{ v["host"] }}/.stfolder
-      chown 1000 {{ v["host"] }}/.stfolder ## do i need to make and chown this here for syncthing?
+      chown {{syncthing.uid}} {{ v["host"] }}/.stfolder
     {% endfor %}
     
 runcmd:
