@@ -17,11 +17,11 @@ write_files:
           volumes:
             - {{ sftp.config_root }}/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
             - {{ sftp.config_root }}/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
-          ## loop = incorrect volume mapping
-          ##{% for u in sftp.users %}
-          ##  - {{ sftp.sftp_dir }}/{{ u["home_dir"] }}:/home/{{ u["name"] }}
-          ##{% endfor %}
-            - {{ sftp.sftp_dir }}:/home
+        {% for u in sftp.users %}
+          {% for share in u["shares"] %}
+            - {{ share["host"] }}:/home/{{ u["name"] }}/{{ share["name"] }}
+          {% endfor %}
+        {% endfor %}
             - /opt/containers/sftp/data/users.conf:/etc/sftp/users.conf
           ports:
             - "{{ sftp.port }}:22"
@@ -31,8 +31,6 @@ write_files:
       mkdir -p {{ sftp.config_root }}
       ssh-keygen -t ed25519 -f {{ sftp.config_root }}/ssh_host_ed25519_key < /dev/null
       ssh-keygen -t rsa -b 4096 -f {{ sftp.config_root }}/ssh_host_rsa_key < /dev/null
-      ## create users.conf to populate in loop
-      touch /opt/containers/sftp/data/users.conf
       ## write each user's public key to their own directory
       {% for u in sftp.users %}
         ## create home directory
