@@ -31,7 +31,7 @@ write_files:
           restart: unless-stopped
 
   ## create .stfolder so syncthing recognizes photo library as syncable directory
-  - path: /opt/containers/templates/sftp/stfolder.sh.j2
+  - path: /opt/containers/templates/syncthing/stfolder.sh.j2
     content: |
     {% for v in syncthing.volumes %}
       mkdir -p {{ v["host"] }}/.stfolder
@@ -41,7 +41,7 @@ write_files:
 runcmd:
   - mkdir -p /opt/containers/syncthing
   ## Render and execute stfolder.sh from the template:
-  - j2 /opt/containers/templates/sftp/stfolder.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
+  - j2 /opt/containers/templates/syncthing/stfolder.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
   ## Render the docker-compose from the template:
   - j2 /opt/containers/templates/syncthing/docker-compose.yaml.j2 /run/cloud-init/user-variables-sensitive.yaml -o /opt/containers/syncthing/docker-compose.yaml
   ## Create and start the containers
