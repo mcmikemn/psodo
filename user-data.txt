@@ -56,6 +56,10 @@ write_files:
         listen_port: 22000
         ## Set Syncthing protocol discovery port
         discovery_port: 21027
+        ## set UID that Syncthing runs as
+        uid: 1000
+        ## set GID tht Syncthing runs as
+        gid: 1000
       sftp:
         ## Set host port
         port: 2222
@@ -68,8 +72,8 @@ write_files:
           - name: user1
             ## Add a public key for each device the user will log in from
             pubkeys:
-              - pubkey01: "ssh-rsa XXXXXXXX"
-              - pubkey02: "ssh-rsa XXXXXXXX"
+              - ssh-rsa XXXXXXXX
+              - ssh-rsa XXXXXXXX
             uid: 1000
             gid: 100
             ## Set 1 or more directories on host to share in sftp user home
@@ -82,7 +86,8 @@ write_files:
                 host: /storage/photos/person2pix
           ## only configure additional users if you don't want Syncthing and SFTP to manage the same directory
           - name: user2
-            pubkey: "ssh-rsa XXXXXXXX"
+            pubkeys:
+              - ssh-rsa XXXXXXXX
             uid: 1002
             gid: 100
             shares:

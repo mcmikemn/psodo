@@ -25,10 +25,23 @@ write_files:
             - 127.0.0.1:8384:8384
             - {{ syncthing.listen_port }}:22000
             - {{ syncthing.discovery_port }}:21027/udp
+          environment: 
+            PUID: {{ syncthing.uid }}
+            PGID: {{ syncthing.gid }}
           restart: unless-stopped
 
+  ## create .stfolder so syncthing recognizes photo library as syncable directory
+  - path: /opt/containers/templates/sftp/stfolder.sh.j2
+    content: |
+    {% for v in syncthing.volumes %}
+      mkdir -p {{ v["host"] }}/.stfolder
+      chown 1000 {{ v["host"] }}/.stfolder ## do i need to make and chown this here for syncthing?
+    {% endfor %}
+    
 runcmd:
   - mkdir -p /opt/containers/syncthing
+  ## Render and execute stfolder.sh from the template:
+  - j2 /opt/containers/templates/sftp/stfolder.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
   ## Render the docker-compose from the template:
   - j2 /opt/containers/templates/syncthing/docker-compose.yaml.j2 /run/cloud-init/user-variables-sensitive.yaml -o /opt/containers/syncthing/docker-compose.yaml
   ## Create and start the containers
