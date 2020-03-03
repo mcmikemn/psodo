@@ -34,9 +34,11 @@ write_files:
       ssh-keygen -t rsa -b 4096 -f {{ sftp.config_root }}/ssh_host_rsa_key < /dev/null
       ## for each user...
       {% for u in sftp.users %}
-        ## write their public key to their own directory
+        ## write their public key(s) to their own directory
         mkdir -p /opt/containers/sftp/data/{{ u["name"] }}/.ssh/keys
-        echo '{{ u["pubkey"] }}' > /opt/containers/sftp/data/{{ u["name"] }}/.ssh/keys/id_rsa.pub
+        {% for p in u["pubkeys"] %}
+          echo '{{ p }}' > /opt/containers/sftp/data/{{ u["name"] }}/.ssh/keys/{{ p }}_id_rsa.pub
+        {% endfor %}
         ## also add them to users.conf
         echo '{{ u["name"] }}::{{ u["uid"] }}:{{ u["gid"] }}:{{ u["name"] }}' >> /opt/containers/sftp/data/users.conf
         ## and create and chown each of their shares
