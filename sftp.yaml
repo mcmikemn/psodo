@@ -21,37 +21,36 @@ write_files:
           {% for share in u["shares"] %}
             - {{ share["host"] }}:/home/{{ u["name"] }}/{{ share["name"] }}
           {% endfor %}
+            - /opt/containers/sftp/data/{{ u["name"] }}/.ssh:/home/{{ u["name"] }}/.ssh
         {% endfor %}
             - /opt/containers/sftp/data/users.conf:/etc/sftp/users.conf
           ports:
             - "{{ sftp.port }}:22"
           
-  - path: /opt/containers/templates/sftp/keys.sh.j2
+  - path: /opt/containers/templates/sftp/setup.sh.j2
     content: |
       mkdir -p {{ sftp.config_root }}
       ssh-keygen -t ed25519 -f {{ sftp.config_root }}/ssh_host_ed25519_key < /dev/null
       ssh-keygen -t rsa -b 4096 -f {{ sftp.config_root }}/ssh_host_rsa_key < /dev/null
-      ## write each user's public key to their own directory
+      ## for each user...
       {% for u in sftp.users %}
-        ## create home directory
-        ##mkdir -p {{ sftp.sftp_dir }}/{{ u["name"] }}
-        ## create .ssh/keys/
-        ## I don't think I need the next line, I think the loop under sftp.volumes in docker-compose.yaml does this
-        ##mkdir -p /home/{{ u["name"] }}/.ssh/keys
-        ## write key
+        ## write their public key to their own directory
         mkdir -p /opt/containers/sftp/data/{{ u["name"] }}/.ssh/keys
         echo '{{ u["pubkey"] }}' > /opt/containers/sftp/data/{{ u["name"] }}/.ssh/keys/id_rsa.pub
-        ## also add user to users.conf
-        ##echo '{{ u["name"] }}::{{ u["uid"] }}:{{ u["gid"] }}:/home/{{ u["name"] }}/.ssh/keys/id_rsa.pub' >> /opt/containers/sftp/data/users.conf
+        ## also add them to users.conf
         echo '{{ u["name"] }}::{{ u["uid"] }}:{{ u["gid"] }}:{{ u["name"] }}' >> /opt/containers/sftp/data/users.conf
+        ## and create and chown each of their shares
+        {% for share in u["shares"] %}
+          mkdir -p {{ share["host"] }}
+          chown {{ u["uid"] }} {{ share["host"] }}
+        {% endfor %}
       {% endfor %}
     
 runcmd:
   - mkdir -p /opt/containers/sftp/data
   ## Render and execute keys.sh from the template:
-  - j2 /opt/containers/templates/sftp/keys.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
+  - j2 /opt/containers/templates/sftp/setup.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
   ## Render the docker-compose from the template:
   - j2 /opt/containers/templates/sftp/docker-compose.yaml.j2 /run/cloud-init/user-variables-sensitive.yaml -o /opt/containers/sftp/docker-compose.yaml
   ## Create and start the containers
   - docker-compose -f /opt/containers/sftp/docker-compose.yaml up -d
-  
