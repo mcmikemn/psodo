@@ -26,6 +26,7 @@ write_files:
             - /opt/containers/sftp/data/users.conf:/etc/sftp/users.conf
           ports:
             - "{{ sftp.port }}:22"
+          restart: unless-stopped
           
   - path: /opt/containers/templates/sftp/setup.sh.j2
     content: |

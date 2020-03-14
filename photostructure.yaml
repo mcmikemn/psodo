@@ -48,6 +48,7 @@ write_files:
             - "traefik.docker.network=proxy"
             - "traefik.http.middlewares.photostructure-auth.basicauth.users={{ photostructure.basicauth_users }}"
             - "traefik.http.routers.photostructure-secure.middlewares=photostructure-auth"
+          restart: unless-stopped
       networks:
         proxy:
           external: true
