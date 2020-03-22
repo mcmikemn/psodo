@@ -17,7 +17,7 @@ write_files:
           security_opt:
             - no-new-privileges:true
           volumes:
-            - /opt/containers/syncthing/data:/var/syncthing
+            - /mnt/config/syncthing:/var/syncthing
           {% for v in syncthing.volumes %}
             - {{ v["host"] }}:{{ v["container"] }}
           {% endfor %}
