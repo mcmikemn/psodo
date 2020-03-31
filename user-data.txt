@@ -47,6 +47,10 @@ write_files:
         username: user
         ## Set PS password
         password: password
+        ## Set PS level of logging
+        loglevel: info
+        ## Set directory for PS logs (local should be /opt/containers/photostructure/logs - or save it to persistent storage)
+        logdir: /storage/photos/.photostructure/logs
       syncthing:
         ## Set Syncthing default-folder (for Syncthing configs and also default syncing folder - host volume should be same as photostructure.library_path, above, to sync the PS library you're creating)
         volumes:

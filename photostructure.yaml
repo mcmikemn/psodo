@@ -21,11 +21,12 @@ write_files:
             PS_SCAN_ALL_DRIVES: 1
             PS_SCAN_MY_PICTURES: 1
             PS_SCAN_PATHS: /ps/library
-            PS_LOG_LEVEL: debug
+            PS_LOG_LEVEL: {{ photostructure.loglevel }}
             PS_LOG_COMPRESS: 1
             PS_REQUIRE_MAKE_MODEL: 0
             PS_SYNC_INTERVAL_HOURS: 2
             PS_MAX_CPU_PERCENT: 100
+            PS_LOG_DIR: {{ photostructure.logdir }}
           volumes:
             - /opt/containers/photostructure/config:/ps/config:rw
             - {{ photostructure.library_path }}:/ps/library:rw
