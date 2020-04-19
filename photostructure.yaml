@@ -62,6 +62,8 @@ write_files:
 
 runcmd:
   - mkdir -p /opt/containers/photostructure 
+  ## install ffmpeg for Photostructure to process videos faster/better
+  apt-get install -y ffmpeg
   ## Create the htpasswd encoded username/password and add it into the user variables:
   - yq write --inplace -- /run/cloud-init/user-variables-sensitive.yaml photostructure.basicauth_users $(j2 /opt/containers/templates/photostructure/password_encode.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | bash)
   ## Render the docker-compose from the template:
