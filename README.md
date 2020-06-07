@@ -2,6 +2,8 @@
 Host Photostructure Server on a Digital Ocean droplet.
 
 ## Create droplet
+- customize the values in user-data.txt to your needs
+
 #### On Digital Ocean website:
 - create a 1GB volume in the datacenter of your choice - this config volume will be for persistent storage (e.g., certificates)
 - create another volume in the same datacenter - this photo library volume can be whatever size you want, it will host your photos and videos
