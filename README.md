@@ -1,4 +1,4 @@
-# wtfaid
+# psodo
 Host Photostructure Server on a Digital Ocean droplet.
 
 ## Create droplet
