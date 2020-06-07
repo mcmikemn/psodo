@@ -1,4 +1,4 @@
-# wtfaid
+# psodo
 
 ## Create droplet
 #### On Digital Ocean website:
