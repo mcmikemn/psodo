@@ -28,7 +28,7 @@ write_files:
         email: address@email.com
         ## Set the LetsEncrypt CA-server
         ## use https://acme-staging-v02.api.letsencrypt.org/directory for staging environment
-        ## use https://acme--v02.api.letsencrypt.org/directory for live environment
+        ## use https://acme-v02.api.letsencrypt.org/directory for live environment
         caserver: https://acme-staging-v02.api.letsencrypt.org/directory
         ## Set acme dir (use persistent volume to not lose ssh keys (e.g., letsencrypt) when rebuilding droplet - i.e., volumes["mount"], above)
         acme_dir: /mnt/config/traefik
