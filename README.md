@@ -1,7 +1,7 @@
 # psodo
-Host Photostructure Server on a Digital Ocean droplet.
+Host [Photostructure](https://photostructure.com/server/photostructure-for-servers/) Server on a Digital Ocean droplet.
 
-## Create droplet
+## Create droplet:
 - customize the values in user-data.txt to your needs
 
 #### On Digital Ocean website:
