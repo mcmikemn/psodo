@@ -15,11 +15,23 @@ write_files:
         mount -o discard,defaults /dev/disk/by-id/scsi-0DO_Volume_{{ v["name"] }} {{ v["mount"] }}
         echo /dev/disk/by-id/scsi-0DO_Volume_{{ v["name"] }} {{ v["mount"] }} {{ v["fs_type"] }} defaults,nofail,discard 0 0 | sudo tee -a /etc/fstab
       {% endfor %}
+      
+  - path: /opt/containers/templates/volumes/rclone.sh.j2
+    content: |
+      #!/bin/sh
+      set -e
+      mkdir -p {{ rclone.mount }}
+      mkdir -p ~/.config/rclone
+      cp -p /run/cloud-init/rclone.conf ~/.config/rclone/rclone.conf
+      rclone mount --daemon {{ rclone.remote }}:{{ rclone.bucket }} {{ rclone.mount }}
 
 packages:
   - python3-pip
  
 runcmd:
   - pip3 install j2cli[yaml]
+  - apt-get install -y rclone
   ## Render and execute the volumes_mount.sh from the template
   - j2 /opt/containers/templates/volumes/volumes_mount.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
+  ## Render and execute the rclone.sh from the template
+  - j2 /opt/containers/templates/volumes/rclone.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
