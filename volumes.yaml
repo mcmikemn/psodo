@@ -22,7 +22,7 @@ write_files:
       mkdir -p {{ rclone.mount }}
       mkdir -p ~/.config/rclone
       mv /run/cloud-init/rclone.conf ~/.config/rclone/rclone.conf
-      rclone mount --daemon {{ rclone.remote }}:{{ rclone.s3-bucket }} {{ rclone.mount }}
+      rclone mount --daemon {{ rclone.remote }}:{{ rclone.s3_bucket }} {{ rclone.mount }}
       
 packages:
   - python3-pip
