@@ -1,7 +1,7 @@
 # psodo
-Host Photostructure Server on a Digital Ocean droplet.
+Host [Photostructure](https://photostructure.com/server/photostructure-for-servers/) Server on a Digital Ocean droplet.
 
-## Create droplet
+## Create droplet:
 - customize the values in user-data.txt to your needs
 
 #### On Digital Ocean website:
@@ -15,7 +15,7 @@ Host Photostructure Server on a Digital Ocean droplet.
     - click on your config volume
 - choose the same datacenter your Photostructure library and config volumes are also in - they must be in same datacenter
 - check "User Data" and paste in the contents of your customized user-data.txt
-- authentication: make sure your laptop's key is selected (to SSH in as root w/out password)
+- authentication: make sure your computer's key is selected (to SSH in as root w/out password)
 - name your droplet
 
 #### Quickly after droplet is created and is booting:
