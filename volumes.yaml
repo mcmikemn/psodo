@@ -33,6 +33,6 @@ runcmd:
   - apt install s3fs
   - pip3 install j2cli[yaml]
   ## render and execute s3fs.sh from template
-  - j2 /opt/containers/templates/volumes/s3fs.sh.j2 /run/cloud-init/user-variables-sensitive/yaml | /bin/bash
+  - j2 /opt/containers/templates/volumes/s3fs.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
   ## Render and execute the volumes_mount.sh from the template
   - j2 /opt/containers/templates/volumes/volumes_mount.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
