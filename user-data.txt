@@ -43,6 +43,9 @@ write_files:
         domain: sub.domain.tld
         ## Set path to PS library
         library_path: /storage/photos
+        ## Set path(s) to additional directories to scan - these are mapped paths (inside the container). You may use either standard PATH formatting,
+        ## like "/path/one:/path/two", or use JSON encoding, like '["/path/one","/path/two"]'. Also, you don't need to include your library here, but you can.
+        scanpaths: /path/to/scan
         ## Set PS username
         username: user
         ## Set PS password
