@@ -14,6 +14,7 @@ write_files:
       services:
         syncthing:
           image: syncthing/syncthing
+          container_name: syncthing
           security_opt:
             - no-new-privileges:true
           volumes:
