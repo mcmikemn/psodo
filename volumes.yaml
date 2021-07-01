@@ -26,10 +26,9 @@ write_files:
 
 packages:
   - python3-pip
+  - s3fs
  
 runcmd:
-  ## install s3fs
-  - apt install s3fs
   - pip3 install j2cli[yaml]
   ## render and execute s3fs.sh from template
   - j2 /opt/containers/templates/volumes/s3fs.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
