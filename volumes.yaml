@@ -14,7 +14,6 @@ write_files:
       s3fs {{ s3fs.space-name }} /mnt/ps_assets -o passwd_file=${HOME}/.passwd-s3fs -o url=https://{{ s3fs.endpoint }}/ -o use_path_request_style
       echo {{ s3fs.space-name }} /mnt/ps_assets fuse.s3fs _netdev,allow_other,use_path_request_style,url=https://{{ s3fs.endpoint }}/ 0 0 >> /etc/fstab
 
-write_files:
   - path: /opt/containers/templates/volumes/volumes_mount.sh.j2
     content: |
       #!/bin/sh
