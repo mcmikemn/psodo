@@ -126,6 +126,7 @@ runcmd:
   ## Render the prepare_acme file from the template:
   - j2 /opt/containers/templates/traefik/prepare_acme.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
   ## Create the htpasswd encoded username/password and add it into the user variables:
+  snap install yq --channel=v3/stable
   - yq write --inplace -- /run/cloud-init/user-variables-sensitive.yaml traefik.basicauth_users $(j2 /opt/containers/templates/traefik/password_encode.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | bash)
   ## Render the traefik config from the template:
   - mkdir -p /opt/containers/traefik/data 
