@@ -120,7 +120,6 @@ apt:
 packages:
   - apache2-utils
   - jq
-  - yq
  
 runcmd:
   ## Render the prepare_acme file from the template:
