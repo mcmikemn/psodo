@@ -11,6 +11,8 @@ write_files:
       #!/bin/sh
       set -e
       echo {{ s3fs.key }}:{{ s3fs.secret }} | sudo tee -a ${HOME}/.passwd-s3fs
+      chmod 600 ${HOME}/.passwd-s3fs
+      chown -R {{ syncthing.uid }}:{{ syncthing.gid }} ${HOME}/.passwd-s3fs
       mkdir -p {{ s3fs.mountpoint }}
       s3fs {{ s3fs.spacename }} {{ s3fs.mountpoint }} -o passwd_file=${HOME}/.passwd-s3fs -o url=https://{{ s3fs.endpoint }}/ -o use_path_request_style
       echo {{ s3fs.spacename }} {{ s3fs.mountpoint }} fuse.s3fs _netdev,allow_other,use_path_request_style,url=https://{{ s3fs.endpoint }}/ 0 0 >> /etc/fstab
