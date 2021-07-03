@@ -32,6 +32,8 @@ write_files:
             GID: {{ syncthing.gid }}
             PS_CPU_LOAD_PERCENT: 100
             PS_PROCESS_PRIORITY: AboveNormal
+            PS_ORIGINALS_DIR: {{ photostructure.asset_path }}
+            PS_LIBRARY_DIR: {{ photostructure.library_path }}
           volumes:
             - /opt/containers/photostructure/config:/ps/config:rw
             - {{ photostructure.library_path }}:/ps/library:rw
