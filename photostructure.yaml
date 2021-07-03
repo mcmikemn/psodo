@@ -20,16 +20,16 @@ write_files:
           environment:
             #is PS_HOST_SCAN_PATHS still a thing?
             #PS_HOST_SCAN_PATHS: /ps/library
-            PS_SCAN_ALL_DRIVES: false
-            PS_SCAN_MY_PICTURES: false
+            PS_SCAN_ALL_DRIVES: 0
+            PS_SCAN_MY_PICTURES: 0
             PS_SCAN_PATHS: {{ photostructure.scanpaths }}
             PS_LOG_LEVEL: {{ photostructure.loglevel }}
-            PS_LOG_COMPRESS: true
-            PS_REQUIRE_MAKE_MODEL: false
+            PS_LOG_COMPRESS: 1
+            PS_REQUIRE_MAKE_MODEL: 0
             PS_SYNC_INTERVAL_HOURS: 2
-            PS_FIX_PERMISSIONS: false
-            UID: 1000
-            GID: 1000
+            PS_FIX_PERMISSIONS: 0
+            UID: {{ syncthing.uid }}
+            GID: {{ syncthing.gid }}
             PS_CPU_LOAD_PERCENT: 100
             PS_PROCESS_PRIORITY: AboveNormal
           volumes:
@@ -37,7 +37,7 @@ write_files:
             - {{ photostructure.library_path }}:/ps/library:rw
             - {{ photostructure.logdir }}:/ps/logs:rw
             - /tmp/photostructure-docker:/ps/tmp:rw
-            - /mnt/ps_assets:/ps_assets:rw
+            - /mnt/ps_assets:/var/ps_assets:rw
           networks:
             - proxy
           labels:
