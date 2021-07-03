@@ -66,9 +66,14 @@ write_files:
     content: |
       htpasswd -nb {{ photostructure.username }} {{ photostructure.password }} | sed -e s/\\$/\\$\\$/g | grep .
 
+  - path: /opt/containers/templates/photostructure/prep.sh.j2
+    content: |
+      chown -R {{ syncthing.uid }}:{{ syncthing.gid }} /opt/containers/photostructure
 
 runcmd:
-  - mkdir -p /opt/containers/photostructure 
+  - mkdir -p /opt/containers/photostructure
+  ## run prep commans (set permissions)
+  - j2 /opt/containers/templates/photostructure/prep.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | /bin/bash
   ## Create the htpasswd encoded username/password and add it into the user variables:
   - yq write --inplace -- /run/cloud-init/user-variables-sensitive.yaml photostructure.basicauth_users $(j2 /opt/containers/templates/photostructure/password_encode.sh.j2 /run/cloud-init/user-variables-sensitive.yaml | bash)
   ## Render the docker-compose from the template:
